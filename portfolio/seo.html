@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEO &amp; Site Performance | Danner Baumgartner</title>
+<meta name="description" content="Plain-English SEO services. I help small businesses show up on Google with faster, clearer, better-written websites.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=Libre+Franklin:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0a0a0b;
+  --bg-elevated: #111113;
+  --bg-card: #16161a;
+  --surface: #1e1e23;
+  --border: #2a2a30;
+  --border-hover: #3a3a42;
+  --text: #e8e6e3;
+  --text-secondary: #9a9898;
+  --text-muted: #5f5e5c;
+  --accent: #c4a46c;
+  --accent-dim: #8a7448;
+  --green: #4ade80;
+  --green-bg: rgba(74, 222, 128, 0.08);
+  --blue: #60a5fa;
+  --blue-bg: rgba(96, 165, 250, 0.08);
+  --purple: #a78bfa;
+  --purple-bg: rgba(167, 139, 250, 0.08);
+  --orange: #fb923c;
+  --orange-bg: rgba(251, 146, 60, 0.08);
+  --font-display: 'Sora', -apple-system, sans-serif;
+  --font-body: 'Libre Franklin', -apple-system, sans-serif;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-weight: 400;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+.dot-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle, var(--text-muted) 0.5px, transparent 0.5px);
+  background-size: 32px 32px;
+  opacity: 0.07;
+}
+
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 128px 128px;
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--border-hover); }
+
+::selection {
+  background: rgba(196, 164, 108, 0.25);
+  color: var(--text);
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 clamp(1.25rem, 4vw, 3rem);
+  position: relative;
+  z-index: 1;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.08s; }
+.reveal-delay-2 { transition-delay: 0.16s; }
+.reveal-delay-3 { transition-delay: 0.24s; }
+
+.topbar {
+  padding: 1.5rem 0;
+  position: relative;
+  z-index: 2;
+}
+
+.topbar-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.topbar-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.topbar-back:hover { color: var(--accent); }
+.topbar-back svg { width: 14px; height: 14px; }
+
+.topbar-mark {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.hero {
+  padding: 6rem 0 4rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -30%;
+  right: -10%;
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(ellipse, rgba(196, 164, 108, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 1.5rem;
+}
+
+.hero-label::before {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 1px;
+  background: var(--accent);
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 6vw, 4.5rem);
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin-bottom: 1.5rem;
+  max-width: 900px;
+}
+
+.hero-title em {
+  font-style: normal;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.hero-sub {
+  font-size: clamp(1rem, 1.6vw, 1.2rem);
+  color: var(--text-secondary);
+  max-width: 680px;
+  line-height: 1.7;
+  font-weight: 300;
+  margin-bottom: 2.5rem;
+}
+
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  color: var(--accent);
+  text-decoration: none;
+  padding: 0.8rem 1.6rem;
+  border: 1px solid var(--accent-dim);
+  border-radius: 8px;
+  transition: all 0.3s var(--ease-out);
+}
+
+.hero-cta:hover {
+  background: rgba(196, 164, 108, 0.08);
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.hero-cta svg { width: 16px; height: 16px; }
+
+.section {
+  padding: 5rem 0;
+  border-top: 1px solid var(--border);
+}
+
+.section-eyebrow {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-dim);
+  margin-bottom: 1rem;
+}
+
+.section-h {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.5rem;
+  max-width: 760px;
+}
+
+.section-lede {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  line-height: 1.75;
+  font-weight: 300;
+  max-width: 720px;
+  margin-bottom: 2.5rem;
+}
+
+.what-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.what-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.5rem;
+  transition: border-color 0.3s var(--ease-out);
+}
+
+.what-card:hover { border-color: var(--border-hover); }
+
+.what-num {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+
+.what-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.01em;
+}
+
+.what-body {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  font-weight: 300;
+}
+
+.pillars {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 2rem;
+}
+
+.pillar {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent-dim);
+  border-radius: 10px;
+  padding: 2rem clamp(1.5rem, 3vw, 2.5rem);
+  transition: all 0.3s var(--ease-out);
+}
+
+.pillar:hover {
+  border-color: var(--border-hover);
+  border-left-color: var(--accent);
+  transform: translateX(3px);
+}
+
+.pillar-eyebrow {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.75rem;
+}
+
+.pillar-h {
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 2.2vw, 1.6rem);
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.015em;
+}
+
+.pillar-plain {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  font-weight: 300;
+  margin-bottom: 1.25rem;
+  max-width: 680px;
+}
+
+.pillar-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 0.5rem 1.5rem;
+}
+
+.pillar-list li {
+  font-size: 0.9rem;
+  color: var(--text);
+  font-weight: 400;
+  padding-left: 1.25rem;
+  position: relative;
+  line-height: 1.55;
+}
+
+.pillar-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55rem;
+  width: 6px;
+  height: 6px;
+  background: var(--accent-dim);
+  border-radius: 50%;
+}
+
+.pillar-list li span {
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  display: block;
+  margin-top: 0.15rem;
+  font-weight: 300;
+}
+
+.process {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+  counter-reset: step;
+}
+
+.step {
+  position: relative;
+  padding: 1.75rem 1.5rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  counter-increment: step;
+}
+
+.step::before {
+  content: counter(step, decimal-leading-zero);
+  position: absolute;
+  top: 1rem;
+  right: 1.25rem;
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 300;
+  color: var(--border-hover);
+  letter-spacing: -0.02em;
+}
+
+.step-h {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.01em;
+  max-width: 75%;
+}
+
+.step-body {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  font-weight: 300;
+}
+
+.faq {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.faq details {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+  transition: border-color 0.2s ease;
+}
+
+.faq details[open] { border-color: var(--accent-dim); }
+
+.faq summary {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  letter-spacing: -0.005em;
+}
+
+.faq summary::-webkit-details-marker { display: none; }
+
+.faq summary::after {
+  content: '+';
+  font-size: 1.4rem;
+  color: var(--accent);
+  font-weight: 300;
+  transition: transform 0.2s ease;
+}
+
+.faq details[open] summary::after { content: '−'; }
+
+.faq-body {
+  margin-top: 0.85rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+.cta-section {
+  padding: 6rem 0;
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+
+.cta-section h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cta-section p {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  font-weight: 300;
+  max-width: 560px;
+  margin: 0 auto 2rem;
+  line-height: 1.7;
+}
+
+.cta-buttons {
+  display: inline-flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.85rem 1.7rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  text-decoration: none;
+  transition: all 0.3s var(--ease-out);
+}
+
+.btn-primary {
+  color: var(--accent);
+  background: rgba(196, 164, 108, 0.06);
+  border: 1px solid var(--accent-dim);
+}
+
+.btn-primary:hover {
+  background: rgba(196, 164, 108, 0.12);
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.btn-ghost {
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+
+.btn-ghost:hover {
+  color: var(--text);
+  border-color: var(--border-hover);
+}
+
+.btn svg { width: 16px; height: 16px; }
+
+.footer {
+  padding: 3rem 0;
+  border-top: 1px solid var(--border);
+}
+
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.footer-text {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 300;
+}
+
+.footer-text a {
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+
+.footer-text a:hover { color: var(--accent); }
+
+@media (max-width: 640px) {
+  .pillar-list { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="dot-bg"></div>
+<div class="grain"></div>
+
+<header class="topbar">
+  <div class="container">
+    <div class="topbar-inner">
+      <a href="index.html" class="topbar-back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Back to Portfolio
+      </a>
+      <div class="topbar-mark">Danner Baumgartner</div>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-label reveal">A Service I Offer</div>
+    <h1 class="hero-title reveal reveal-delay-1">Help people <em>find your business</em> on Google.</h1>
+    <p class="hero-sub reveal reveal-delay-2">When someone in your town searches for the work you do, you want to show up. I make that happen with a faster website, clearer wording, and the behind-the-scenes stuff Google looks for. No tech talk required.</p>
+    <a href="#contact" class="hero-cta reveal reveal-delay-3">
+      Talk to me about your site
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </a>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-eyebrow">What is SEO, really?</div>
+      <h2 class="section-h">Think of Google as a giant phone book that ranks itself.</h2>
+      <p class="section-lede">When someone types &ldquo;roofer near me,&rdquo; Google picks a few websites to show first. Those top spots get most of the clicks. SEO, short for <em>Search Engine Optimization</em>, is the work of making sure your business is one of the names Google trusts enough to put near the top.</p>
+    </div>
+
+    <div class="what-grid">
+      <div class="what-card reveal">
+        <div class="what-num">01</div>
+        <div class="what-title">More phone calls</div>
+        <p class="what-body">When you show up higher in search, more people see you, click your site, and pick up the phone.</p>
+      </div>
+      <div class="what-card reveal reveal-delay-1">
+        <div class="what-num">02</div>
+        <div class="what-title">Better customers</div>
+        <p class="what-body">People searching Google are already looking to buy. That&rsquo;s why these leads are usually warmer than ads.</p>
+      </div>
+      <div class="what-card reveal reveal-delay-2">
+        <div class="what-num">03</div>
+        <div class="what-title">It keeps working</div>
+        <p class="what-body">Unlike ads that stop the day you stop paying, SEO keeps bringing in visitors month after month.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-eyebrow">How I optimize your site</div>
+      <h2 class="section-h">Three things that matter, in plain English.</h2>
+      <p class="section-lede">Most of SEO comes down to three jobs: make your website easy for Google to read, write it so the right people find it, and make it fast enough that nobody leaves before it loads. Here&rsquo;s what each one means for you.</p>
+    </div>
+
+    <div class="pillars">
+
+      <div class="pillar reveal">
+        <div class="pillar-eyebrow">Part 1</div>
+        <h3 class="pillar-h">Making your site easy for Google to read</h3>
+        <p class="pillar-plain">Google sends little robots out to read every website on the internet. If your site is built sloppily, the robots get confused and skip over it. I make sure yours is built so Google understands exactly what you do and who you serve.</p>
+        <ul class="pillar-list">
+          <li>A clean site structure
+            <span>So Google can find every page on your site, not just the homepage.</span>
+          </li>
+          <li>Labels Google understands
+            <span>Tags on each page that tell Google what it&rsquo;s about, written in a language Google reads natively.</span>
+          </li>
+          <li>A sitemap and rules file
+            <span>Like handing Google a map of your business so it knows where everything is.</span>
+          </li>
+          <li>Mobile-friendly layout
+            <span>More than half of searches happen on phones. Google ranks the mobile version of your site.</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="pillar reveal">
+        <div class="pillar-eyebrow">Part 2</div>
+        <h3 class="pillar-h">Writing the site so the right people find it</h3>
+        <p class="pillar-plain">If you&rsquo;re a roofer in Everett, your site needs to actually say &ldquo;roofer in Everett.&rdquo; Not just &ldquo;quality craftsmanship since 1998.&rdquo; I figure out the exact phrases your customers are typing into Google, then put those words in the right places on your pages.</p>
+        <ul class="pillar-list">
+          <li>The words people actually search
+            <span>I research what real customers type, not what you think they type.</span>
+          </li>
+          <li>Page titles that get clicked
+            <span>The blue headline you see in Google results. A good one doubles your clicks.</span>
+          </li>
+          <li>Clear headings on every page
+            <span>So both readers and Google can skim and instantly know what the page covers.</span>
+          </li>
+          <li>Photos that count
+            <span>Every image gets a short description so it shows up in Google Images too.</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="pillar reveal">
+        <div class="pillar-eyebrow">Part 3</div>
+        <h3 class="pillar-h">Making the whole thing fast</h3>
+        <p class="pillar-plain">If your site takes more than 3 seconds to load, most people leave before they ever see it. Google knows this, so slow sites get pushed down in the rankings. I trim the fat so your site opens almost instantly. On a phone, on slow internet, anywhere.</p>
+        <ul class="pillar-list">
+          <li>Smaller, smarter images
+            <span>Photos shrunk down without looking bad, so they load in a blink.</span>
+          </li>
+          <li>Loading only what&rsquo;s needed
+            <span>Your site doesn&rsquo;t download the whole thing at once, just what the visitor sees first.</span>
+          </li>
+          <li>Trimming bloated code
+            <span>Most websites carry hundreds of pounds of dead weight. I take it out.</span>
+          </li>
+          <li>A real speed score you can see
+            <span>I show you the before and after on Google&rsquo;s own speed test, so you don&rsquo;t have to take my word for it.</span>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-eyebrow">How we work together</div>
+      <h2 class="section-h">A simple four-step process.</h2>
+      <p class="section-lede">You don&rsquo;t need to learn any of this stuff. You tell me about your business, I do the work, and I report back in a way that actually makes sense.</p>
+    </div>
+
+    <div class="process">
+      <div class="step reveal">
+        <h4 class="step-h">We talk</h4>
+        <p class="step-body">A quick call about your business, your customers, and what you want more of: calls, bookings, or sales.</p>
+      </div>
+      <div class="step reveal reveal-delay-1">
+        <h4 class="step-h">I audit your site</h4>
+        <p class="step-body">I run your site through the same tools Google uses, then send you a plain-English report on what&rsquo;s working and what isn&rsquo;t.</p>
+      </div>
+      <div class="step reveal reveal-delay-2">
+        <h4 class="step-h">I do the work</h4>
+        <p class="step-body">I handle the writing, the speed fixes, and the technical setup. You don&rsquo;t touch a thing unless you want to.</p>
+      </div>
+      <div class="step reveal reveal-delay-3">
+        <h4 class="step-h">You see results</h4>
+        <p class="step-body">Each month you get a short report: where you rank, how many people visited, and what we&rsquo;re doing next.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-eyebrow">Common questions</div>
+      <h2 class="section-h">Honest answers, no sales pitch.</h2>
+    </div>
+
+    <div class="faq">
+      <details class="reveal">
+        <summary>How long until I see results?</summary>
+        <div class="faq-body">Usually a few weeks for the technical and speed work, and two to four months for real ranking jumps. SEO is slow but compounding, like planting trees. If anyone promises you page one in a week, they&rsquo;re lying.</div>
+      </details>
+      <details class="reveal">
+        <summary>Do I have to understand any of this?</summary>
+        <div class="faq-body">No. That&rsquo;s the whole point. I&rsquo;ll explain anything you want explained, but you can also just hand me the keys and check the monthly report. Your job is to run your business.</div>
+      </details>
+      <details class="reveal">
+        <summary>What if I already have a website?</summary>
+        <div class="faq-body">Great. In most cases I can work with what you have. If the site is too broken to fix economically, I&rsquo;ll tell you straight up and we&rsquo;ll talk about rebuilding it.</div>
+      </details>
+      <details class="reveal">
+        <summary>How is this different from running Google Ads?</summary>
+        <div class="faq-body">Ads are a faucet. You turn them on, leads come in; you turn them off, leads stop. SEO is a well you dig once and keep drinking from. Most businesses do best with some of both.</div>
+      </details>
+      <details class="reveal">
+        <summary>What does it cost?</summary>
+        <div class="faq-body">Depends on the size of your site and how competitive your area is. I quote everything up front in a fixed monthly number, with no surprise charges and no slimy contracts. Reach out and I&rsquo;ll give you a real number after looking at your site.</div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section" id="contact">
+  <div class="container">
+    <div class="reveal">
+      <h2>Ready to be the first name on Google?</h2>
+      <p>Send me an email about your business. I&rsquo;ll take a free look at your site and tell you honestly whether SEO is worth it for you.</p>
+      <div class="cta-buttons">
+        <a href="mailto:danner.baumgartner@gmail.com?subject=SEO%20for%20my%20business" class="btn btn-primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          Email Danner
+        </a>
+        <a href="index.html" class="btn btn-ghost">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+          Back to Portfolio
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <p class="footer-text">Built by <a href="index.html">Danner Baumgartner</a> &middot; 2025</p>
+      <p class="footer-text">danner.baumgartner@gmail.com</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

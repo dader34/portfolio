@@ -52,7 +52,6 @@ body {
   overflow-x: hidden;
 }
 
-/* ---- Dot matrix background ---- */
 .dot-bg {
   position: fixed;
   inset: 0;
@@ -64,20 +63,17 @@ body {
   will-change: transform;
 }
 
-/* ---- Scrollbar ---- */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--border-hover); }
 
-/* ---- Layout ---- */
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 clamp(1.25rem, 4vw, 3rem);
 }
 
-/* ---- Reveal animation ---- */
 .reveal {
   opacity: 0;
   transform: translateY(28px);
@@ -95,7 +91,6 @@ body {
 .reveal-delay-6 { transition-delay: 0.48s; }
 .reveal-delay-7 { transition-delay: 0.56s; }
 
-/* ===== HERO ===== */
 .hero {
   position: relative;
   min-height: 100vh;
@@ -239,7 +234,6 @@ body {
   50% { transform: translateX(-50%) translateY(6px); }
 }
 
-/* ===== SKILLS ===== */
 .skills-section {
   padding: 3rem 0;
   border-top: 1px solid var(--border);
@@ -275,7 +269,6 @@ body {
   transform: translateY(-1px);
 }
 
-/* ===== PROJECTS ===== */
 .projects-section {
   padding: 6rem 0;
   position: relative;
@@ -311,7 +304,99 @@ body {
   margin-left: 1rem;
 }
 
-/* Featured cards (Clockwise, TouchBase) */
+.services-section {
+  padding: 6rem 0;
+  border-top: 1px solid var(--border);
+  position: relative;
+  z-index: 1;
+}
+
+.service-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: clamp(2rem, 4vw, 3rem);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2rem;
+  align-items: center;
+  transition: all 0.45s var(--ease-out);
+}
+
+.service-card:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-3px);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.25);
+}
+
+.service-eyebrow {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 1rem;
+}
+
+.service-headline {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+}
+
+.service-blurb {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  font-weight: 300;
+  max-width: 580px;
+  margin-bottom: 1.5rem;
+}
+
+.service-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+  text-decoration: none;
+  padding: 0.65rem 1.4rem;
+  border: 1px solid var(--accent-dim);
+  border-radius: 6px;
+  transition: all 0.3s var(--ease-out);
+}
+
+.service-cta:hover {
+  background: rgba(196, 164, 108, 0.08);
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.service-cta svg { width: 14px; height: 14px; }
+
+.service-glyph {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 6vw, 5rem);
+  font-weight: 300;
+  color: var(--border);
+  line-height: 1;
+  user-select: none;
+  letter-spacing: -0.04em;
+  transition: color 0.45s var(--ease-out);
+}
+
+.service-card:hover .service-glyph { color: var(--accent-dim); }
+
+@media (max-width: 768px) {
+  .service-card { grid-template-columns: 1fr; }
+  .service-glyph { display: none; }
+}
+
 .featured-grid {
   display: grid;
   gap: 1.5rem;
@@ -479,7 +564,6 @@ body {
   color: var(--accent-dim);
 }
 
-/* Standard grid */
 .projects-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
@@ -494,7 +578,6 @@ body {
   font-size: 0.85rem;
 }
 
-/* Diagonal accent on featured cards */
 .featured .diagonal-accent {
   position: absolute;
   top: -60px;
@@ -514,7 +597,6 @@ body {
   transform: scale(1.1);
 }
 
-/* ===== ABOUT ===== */
 .about-section {
   padding: 6rem 0;
   border-top: 1px solid var(--border);
@@ -572,7 +654,6 @@ body {
   font-weight: 400;
 }
 
-/* ===== CONTACT ===== */
 .contact-section {
   padding: 6rem 0;
   border-top: 1px solid var(--border);
@@ -635,7 +716,6 @@ body {
   }
 }
 
-/* ===== FOOTER ===== */
 .footer {
   padding: 3rem 0;
   border-top: 1px solid var(--border);
@@ -686,7 +766,6 @@ body {
   height: 18px;
 }
 
-/* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .project-card.featured .card-inner {
     grid-template-columns: 1fr;
@@ -712,13 +791,11 @@ body {
   }
 }
 
-/* ===== SELECTION ===== */
 ::selection {
   background: rgba(196, 164, 108, 0.25);
   color: var(--text);
 }
 
-/* ===== GRAIN OVERLAY ===== */
 .grain {
   position: fixed;
   inset: 0;
@@ -736,7 +813,6 @@ body {
 <div class="dot-bg" id="dotBg"></div>
 <div class="grain"></div>
 
-<!-- ===== HERO ===== -->
 <section class="hero">
   <div class="container">
     <div class="hero-label reveal">Full-Stack Developer</div>
@@ -755,7 +831,6 @@ body {
   </div>
 </section>
 
-<!-- ===== SKILLS ===== -->
 <section class="skills-section">
   <div class="container">
     <div class="skills-track reveal">
@@ -775,7 +850,6 @@ body {
   </div>
 </section>
 
-<!-- ===== ABOUT ===== -->
 <section class="about-section">
   <div class="container">
     <div class="section-header reveal">
@@ -795,7 +869,7 @@ body {
         </div>
         <div class="about-detail-item">
           <div class="about-detail-label">Education</div>
-          <div class="about-detail-value">Everett Community College — Cybersecurity (Studying)</div>
+          <div class="about-detail-value">Everett Community College, Cybersecurity (Studying)</div>
         </div>
         <div class="about-detail-item">
           <div class="about-detail-label">Interests</div>
@@ -806,19 +880,38 @@ body {
   </div>
 </section>
 
-<!-- ===== PROJECTS ===== -->
-<section class="projects-section">
+<section class="services-section">
   <div class="container">
     <div class="section-header reveal">
       <span class="section-number">02</span>
-      <h2 class="section-title">Selected Work</h2>
+      <h2 class="section-title">Services</h2>
+      <span class="section-line"></span>
+    </div>
+    <article class="service-card reveal">
+      <div>
+        <div class="service-eyebrow">SEO &amp; Site Performance</div>
+        <h3 class="service-headline">Get found on Google. Load fast. Look professional.</h3>
+        <p class="service-blurb">I help local businesses show up when people search for what they offer. That means a faster website, the right words in the right places, and the technical bits Google looks for. All of it handled for you, in plain English.</p>
+        <a href="seo.html" class="service-cta">
+          Learn how it works
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+      <span class="service-glyph">SEO</span>
+    </article>
+  </div>
+</section>
+
+<section class="projects-section">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-number">03</span>
+      <h2 class="section-title">Projects</h2>
       <span class="section-line"></span>
     </div>
 
-    <!-- Featured Projects -->
     <div class="featured-grid">
 
-      <!-- Clockwise -->
       <article class="project-card featured reveal">
         <div class="diagonal-accent"></div>
         <div class="card-inner">
@@ -848,7 +941,6 @@ body {
         </div>
       </article>
 
-      <!-- TouchBase -->
       <article class="project-card featured reveal">
         <div class="diagonal-accent"></div>
         <div class="card-inner">
@@ -876,10 +968,8 @@ body {
       </article>
     </div>
 
-    <!-- Standard Grid -->
     <div class="projects-grid">
 
-      <!-- DOCUTHING -->
       <article class="project-card standard reveal">
         <div class="card-badge badge-published">
           <span class="badge-dot"></span>
@@ -901,7 +991,6 @@ body {
         </a>
       </article>
 
-      <!-- CollabKit -->
       <article class="project-card standard reveal">
         <div class="card-badge badge-sdk">
           <span class="badge-dot"></span>
@@ -920,7 +1009,6 @@ body {
         </div>
       </article>
 
-      <!-- StyleKit UI -->
       <article class="project-card standard reveal">
         <div class="card-badge badge-published">
           <span class="badge-dot"></span>
@@ -946,7 +1034,6 @@ body {
   </div>
 </section>
 
-<!-- ===== CONTACT ===== -->
 <section class="contact-section">
   <div class="container">
     <div class="contact-content reveal">
@@ -960,7 +1047,6 @@ body {
   </div>
 </section>
 
-<!-- ===== FOOTER ===== -->
 <footer class="footer">
   <div class="container">
     <div class="footer-inner">
@@ -975,7 +1061,6 @@ body {
 </footer>
 
 <script>
-// ---- Intersection Observer for reveal animations ----
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
@@ -990,7 +1075,6 @@ const observer = new IntersectionObserver((entries) => {
 
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-// ---- Scroll-linked hero fade + parallax ----
 const hero = document.querySelector('.hero');
 const heroContent = hero.querySelector('.container');
 const dotBg = document.getElementById('dotBg');
@@ -1003,14 +1087,12 @@ window.addEventListener('scroll', () => {
       const heroH = hero.offsetHeight;
       const progress = Math.min(scrolled / (heroH * 0.65), 1);
 
-      // Hero content fades out and drifts up as you scroll
       const opacity = 1 - progress;
       const translate = scrolled * 0.35;
       const scale = 1 - progress * 0.04;
       heroContent.style.opacity = opacity;
       heroContent.style.transform = `translateY(-${translate}px) scale(${scale})`;
 
-      // Dot background parallax
       dotBg.style.transform = `translateY(${scrolled * 0.15}px)`;
 
       ticking = false;
@@ -1019,7 +1101,6 @@ window.addEventListener('scroll', () => {
   }
 }, { passive: true });
 
-// ---- Stagger grid cards ----
 const gridCards = document.querySelectorAll('.projects-grid .project-card');
 gridCards.forEach((card, i) => {
   card.style.transitionDelay = `${i * 0.07}s`;
