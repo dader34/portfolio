@@ -483,7 +483,6 @@ body {
 
 .status-published { color: var(--green); }
 .status-development { color: var(--blue); }
-.status-sdk { color: var(--purple); }
 
 .project-arrow {
   font-family: var(--font-display);
@@ -499,11 +498,6 @@ body {
 .project-row:hover .project-arrow {
   color: var(--accent);
   transform: translateX(4px);
-}
-
-.project-arrow.disabled {
-  opacity: 0.3;
-  pointer-events: none;
 }
 
 @media (max-width: 900px) {
@@ -863,27 +857,14 @@ body {
 
       <article class="project-row reveal">
         <div>
-          <h3 class="project-title"><span class="project-title-link">CollabKit</span></h3>
-          <div class="project-tagline">Real-time collaboration SDK</div>
+          <h3 class="project-title"><a class="project-title-link" href="https://bmweb.danner.ink/" target="_blank" rel="noopener">BMWeb</a></h3>
+          <div class="project-tagline">BMW diagnostics in the browser</div>
         </div>
-        <p class="project-desc">TypeScript client and Python server for building multiplayer apps. CRDT-based state sync with React hooks for presence, screen sharing, and offline support.</p>
+        <p class="project-desc">Reverse-engineered BMW dealer tools as a static web app. Reads and clears fault memory, runs activations, codes modules, and browses wiring diagrams &mdash; over a K+DCAN cable via Web Serial, with no Windows and nothing to install.</p>
         <div class="project-meta">
-          <span class="project-status status-sdk">SDK</span>
-          <div class="project-tech">TS &middot; FastAPI &middot; CRDTs</div>
-          <span class="project-arrow disabled">&#8599;</span>
-        </div>
-      </article>
-
-      <article class="project-row reveal">
-        <div>
-          <h3 class="project-title"><a class="project-title-link" href="https://dader34.github.io/stylekit-ui/" target="_blank" rel="noopener">StyleKit UI</a></h3>
-          <div class="project-tagline">Themeable React component library</div>
-        </div>
-        <p class="project-desc">Component library with 8 distinct visual themes from Apple-style minimalism to brutalism. Published on npm. WCAG 2.1 compliant, tree-shakeable, fully typed.</p>
-        <div class="project-meta">
-          <span class="project-status status-published">Published</span>
-          <div class="project-tech">React &middot; TS &middot; Storybook</div>
-          <a href="https://dader34.github.io/stylekit-ui/" class="project-arrow" target="_blank" rel="noopener" aria-label="Visit StyleKit UI">&#8599;</a>
+          <span class="project-status status-development">In Development</span>
+          <div class="project-tech">JS &middot; Python &middot; Web Serial</div>
+          <a href="https://bmweb.danner.ink/" class="project-arrow" target="_blank" rel="noopener" aria-label="Visit BMWeb">&#8599;</a>
         </div>
       </article>
 
