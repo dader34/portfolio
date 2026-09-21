@@ -188,7 +188,6 @@ body {
 .hero {
   position: relative;
   padding: 5rem 0 4rem;
-  border-bottom: 1px solid var(--line);
 }
 
 .hero-name {
@@ -246,6 +245,9 @@ body {
   height: 16px;
 }
 
+/* BMWeb roundel: black ring and quadrants, with the contrast quadrants
+   filled in the button background color so they read as white. */
+
 .projects-section {
   padding: 4rem 0;
   position: relative;
@@ -266,32 +268,14 @@ body {
   letter-spacing: -0.02em;
 }
 
-.section-line {
-  flex: 1;
-  height: 1px;
-  background: var(--border);
-  margin-left: 1rem;
-}
-
 .services-section {
   padding: 4rem 0;
-  border-top: 1px solid var(--border);
   position: relative;
   z-index: 1;
 }
 
 .service-row {
   padding: 2.5rem 0;
-  border-bottom: 1px solid var(--border);
-  transition: padding 0.3s var(--ease-out);
-}
-
-.service-row:first-of-type {
-  border-top: 1px solid var(--border);
-}
-
-.service-row:hover {
-  padding-left: 0.5rem;
 }
 
 .service-title {
@@ -315,29 +299,21 @@ body {
   .service-row {
     padding: 2rem 0;
   }
-  .service-row:hover { padding-left: 0; }
 }
 
 .project-list {
   display: flex;
   flex-direction: column;
-  border-top: 1px solid var(--border);
 }
 
 .project-row {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr) auto;
-  /* cols: title | description | status+tech */
+  /* cols: title | description | tech */
   gap: 2rem;
   align-items: baseline;
   padding: 2rem 0;
-  border-bottom: 1px solid var(--border);
   position: relative;
-  transition: padding 0.3s var(--ease-out);
-}
-
-.project-row:hover {
-  padding-left: 0.5rem;
 }
 
 .project-title {
@@ -392,29 +368,6 @@ body {
   line-height: 1.6;
 }
 
-.project-status {
-  font-family: var(--font-display);
-  font-size: 0.65rem;
-  font-weight: 500;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-.project-status::before {
-  content: '';
-  width: 5px;
-  height: 5px;
-  background: currentColor;
-  border-radius: 50%;
-}
-
-.status-published { color: var(--green); }
-.status-development { color: var(--blue); }
-
 @media (max-width: 900px) {
   .project-row {
     grid-template-columns: minmax(0, 1fr) auto;
@@ -432,7 +385,6 @@ body {
     gap: 0.5rem 1rem;
     padding: 1.75rem 0;
   }
-  .project-row:hover { padding-left: 0; }
   .project-desc { grid-column: 1 / -1; margin-top: 0.25rem; }
   .project-meta {
     grid-column: 1 / -1;
@@ -444,7 +396,6 @@ body {
 
 .about-section {
   padding: 4rem 0;
-  border-top: 1px solid var(--border);
   position: relative;
   z-index: 1;
 }
@@ -501,7 +452,6 @@ body {
 
 .contact-section {
   padding: 5rem 0;
-  border-top: 1px solid var(--border);
   position: relative;
   z-index: 1;
 }
@@ -562,7 +512,6 @@ body {
 
 .footer {
   padding: 3rem 0;
-  border-top: 1px solid var(--border);
   position: relative;
   z-index: 1;
 }
@@ -610,10 +559,217 @@ body {
   height: 18px;
 }
 
-@media (max-width: 768px) {
-  .section-line {
-    display: none;
-  }
+/* Fogged glass over the page: drag to wipe it clear, it slowly re-fogs.
+   Sits above the background but below content (sections are z-index 1). */
+#fog {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1.6s ease;
+}
+
+#fog.ready { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  #fog { display: none; }
+}
+
+/* Octocat: eyes track the pointer, body reacts on hover. */
+.octocat {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--text-muted);
+  display: inline-flex;
+  transition: color 0.2s ease;
+}
+
+.octocat:hover,
+.octocat[aria-expanded="true"] { color: var(--accent); }
+
+.octocat-svg {
+  width: 22px;
+  height: 22px;
+  transition: transform 0.35s var(--ease-spring);
+}
+
+.octocat:hover .octocat-svg { transform: scale(1.14) rotate(-6deg); }
+.octocat:active .octocat-svg { transform: scale(0.96) rotate(0deg); }
+
+/* --ink already flips with the theme, so the pupils invert on their own. */
+.octocat-eye {
+  fill: var(--ink);
+  transition: transform 0.12s ease-out;
+}
+
+/* GitHub profile card, anchored above the footer icon. */
+.gh-card {
+  position: fixed;
+  right: clamp(1rem, 4vw, 3rem);
+  bottom: 4.5rem;
+  z-index: 200;
+  width: 300px;
+  max-width: calc(100vw - 2rem);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 1.15rem;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.32);
+  opacity: 0;
+  transform: translateY(10px) scale(0.98);
+  transition: opacity 0.22s var(--ease-out), transform 0.22s var(--ease-out);
+}
+
+.gh-card.open { opacity: 1; transform: translateY(0) scale(1); }
+
+.gh-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.6rem;
+  background: none;
+  border: none;
+  color: var(--sub);
+  font-size: 19px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 2px 5px;
+  border-radius: 4px;
+  transition: color 0.2s ease;
+}
+
+.gh-close:hover { color: var(--ink); }
+
+.gh-head { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 0.85rem; }
+
+.gh-avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  flex-shrink: 0;
+  background: var(--bg);
+}
+
+.gh-login { font-size: 14px; font-weight: 600; color: var(--ink); }
+.gh-name { font-size: 12px; color: var(--sub); }
+
+.gh-bio {
+  font-size: 12.5px;
+  color: var(--sub);
+  line-height: 1.5;
+  margin-bottom: 0.85rem;
+}
+
+.gh-stats {
+  display: flex;
+  gap: 1.1rem;
+  font-size: 11.5px;
+  color: var(--sub);
+  padding-bottom: 0.85rem;
+}
+
+.gh-stats b { color: var(--ink); font-weight: 600; }
+
+.gh-repo {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.6rem;
+  font-size: 12.5px;
+  text-decoration: none;
+  color: var(--ink);
+  padding: 0.3rem 0;
+  transition: color 0.2s ease;
+}
+
+.gh-repo:hover { color: var(--accent); }
+.gh-repo span { font-size: 11px; color: var(--sub); flex-shrink: 0; }
+
+.gh-link {
+  display: block;
+  margin-top: 0.9rem;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--btn-fg);
+  background: var(--brand);
+  padding: 7px 12px;
+  border-radius: 6px;
+  transition: opacity 0.2s ease;
+}
+
+.gh-link:hover { opacity: 0.85; }
+.gh-loading { font-size: 12.5px; color: var(--sub); }
+
+@media (prefers-reduced-motion: reduce) {
+  .octocat-svg, .octocat-eye, .gh-card { transition: opacity 0.2s ease; }
+  .octocat:hover .octocat-svg { transform: none; }
+}
+
+/* Custom cursor: hollow ring that expands over interactive elements.
+   Only enabled for fine pointers - touch devices keep native behavior. */
+/* --cursor-size is driven by pinch-to-zoom and also scales the fog wipe. */
+:root { --cursor-size: 18px; }
+
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: var(--cursor-size);
+  height: var(--cursor-size);
+  margin: calc(var(--cursor-size) / -2) 0 0 calc(var(--cursor-size) / -2);
+  border: 1.5px solid var(--accent);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.25s ease,
+              background 0.22s ease,
+              border-color 0.22s ease;
+}
+
+.cursor-ring.active { opacity: 1; }
+
+/* Hover grows it relative to whatever the pinch size currently is. */
+.cursor-ring.hovering {
+  width: calc(var(--cursor-size) * 1.9);
+  height: calc(var(--cursor-size) * 1.9);
+  margin: calc(var(--cursor-size) * -0.95) 0 0 calc(var(--cursor-size) * -0.95);
+  background: var(--accent-soft);
+}
+
+/* While pinching, show the size change instantly instead of easing. */
+.cursor-ring.sizing { transition: opacity 0.25s ease, background 0.22s ease; }
+
+@media (pointer: fine) {
+  html.has-custom-cursor,
+  html.has-custom-cursor * { cursor: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor-ring { transition: opacity 0.25s ease; }
+}
+
+/* Selection is off by default, so dragging across empty background or
+   layout containers never paints a highlight. It is switched back on
+   only for the elements that actually carry text. */
+body { user-select: none; -webkit-user-select: none; }
+
+p, h1, h2, h3, h4, h5, h6,
+li, blockquote, code, pre,
+.hero-name, .hero-tagline,
+.section-title, .service-title, .service-desc,
+.project-title, .project-tagline, .project-desc, .project-tech,
+.about-text, .about-detail-label, .about-detail-value,
+.contact-eyebrow, .contact-heading, .contact-email,
+.footer-text,
+.gh-login, .gh-name, .gh-bio, .gh-stats, .gh-repo {
+  user-select: text;
+  -webkit-user-select: text;
 }
 
 ::selection {
@@ -634,11 +790,25 @@ body {
 <section class="hero">
   <div class="container">
     <h1 class="hero-name reveal reveal-delay-1">Danner<br><em>Baumgartner</em></h1>
-    <p class="hero-tagline reveal reveal-delay-2">Building tools that make work easier, from hobby projects to business solutions.</p>
+    <p class="hero-tagline reveal reveal-delay-2">Building tools that make work easier.</p>
     <div class="hero-links reveal reveal-delay-3">
       <a href="https://github.com/dader34" class="hero-link" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
         GitHub
+      </a>
+      <a href="https://bmweb.danner.ink/" class="hero-link hero-link-bmweb" target="_blank" rel="noopener">
+        <svg viewBox="0 0 100 100" aria-hidden="true">
+          <circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" stroke-width="5"/>
+          <clipPath id="bmweb-disc"><circle cx="50" cy="50" r="31"/></clipPath>
+          <g clip-path="url(#bmweb-disc)">
+            <rect x="19" y="19" width="31" height="31" fill="currentColor"/>
+            <rect x="50" y="50" width="31" height="31" fill="currentColor"/>
+            <rect x="50" y="19" width="31" height="31" fill="var(--brand)"/>
+            <rect x="19" y="50" width="31" height="31" fill="var(--brand)"/>
+          </g>
+          <circle cx="50" cy="50" r="31" fill="none" stroke="currentColor" stroke-width="4"/>
+        </svg>
+        BMWeb
       </a>
     </div>
   </div>
@@ -648,7 +818,6 @@ body {
   <div class="container">
     <div class="section-header reveal">
       <h2 class="section-title">About Me</h2>
-      <span class="section-line"></span>
     </div>
     <div class="about-content">
       <div class="about-text reveal">
@@ -662,7 +831,7 @@ body {
         </div>
         <div class="about-detail-item">
           <div class="about-detail-label">Interests</div>
-          <div class="about-detail-value">Cars, Driving, Technology</div>
+          <div class="about-detail-value">Cars &amp; Driving, Technology</div>
         </div>
       </div>
     </div>
@@ -673,7 +842,6 @@ body {
   <div class="container">
     <div class="section-header reveal">
       <h2 class="section-title">Services</h2>
-      <span class="section-line"></span>
     </div>
 
     <div class="service-row reveal">
@@ -689,10 +857,20 @@ body {
   <div class="container">
     <div class="section-header reveal">
       <h2 class="section-title">Projects</h2>
-      <span class="section-line"></span>
     </div>
 
     <div class="project-list">
+
+      <article class="project-row reveal">
+        <div>
+          <h3 class="project-title"><a class="project-title-link" href="https://tagteammedia.net" target="_blank" rel="noopener">TagTeam Media</a></h3>
+          <div class="project-tagline">Marketing agency site &amp; client portal</div>
+        </div>
+        <p class="project-desc">Client site with a portal where each client tracks their videos and campaign reporting, an editor workflow for submitting and approving content, and an admin side for clients, revenue, and analytics. Built on Lambda and Postgres with Cognito auth.</p>
+        <div class="project-meta">
+          <div class="project-tech">React &middot; Hono &middot; AWS</div>
+        </div>
+      </article>
 
       <article class="project-row reveal">
         <div>
@@ -701,7 +879,6 @@ body {
         </div>
         <p class="project-desc">Reverse-engineered BMW dealer tools as a static web app. Reads and clears fault memory, runs activations, codes modules, and browses wiring diagrams, over a K+DCAN cable via Web Serial, with no Windows and nothing to install.</p>
         <div class="project-meta">
-          <span class="project-status status-development">In Development</span>
           <div class="project-tech">JS &middot; Python &middot; Web Serial</div>
         </div>
       </article>
@@ -713,7 +890,6 @@ body {
         </div>
         <p class="project-desc">Full-stack platform with automated invoicing, leave-bank tracking, a WIP queue, real-time notifications, and an admin dashboard.</p>
         <div class="project-meta">
-          <span class="project-status status-published">Published</span>
           <div class="project-tech">React &middot; Flask &middot; Postgres</div>
         </div>
       </article>
@@ -725,7 +901,6 @@ body {
         </div>
         <p class="project-desc">Team collaboration and communication tool with drag-and-drop queue management, real-time notifications, and a modular frontend / backend / demo architecture.</p>
         <div class="project-meta">
-          <span class="project-status status-development">In Development</span>
           <div class="project-tech">React &middot; Node &middot; Express</div>
         </div>
       </article>
@@ -737,7 +912,6 @@ body {
         </div>
         <p class="project-desc">Browser-based PDF editor with text annotations, page manipulation, merging, splitting, compression, and image conversion. No server uploads.</p>
         <div class="project-meta">
-          <span class="project-status status-published">Published</span>
           <div class="project-tech">React 19 &middot; TS &middot; pdf-lib</div>
         </div>
       </article>
@@ -762,13 +936,26 @@ body {
     <div class="footer-inner">
       <p class="footer-text">Built by <a href="#">Danner Baumgartner</a> &middot; 2025</p>
       <div class="footer-links">
-        <a href="https://github.com/dader34" class="footer-link" target="_blank" rel="noopener" aria-label="GitHub">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-        </a>
+        <button type="button" id="octocat" class="footer-link octocat" aria-label="Open GitHub profile card" aria-expanded="false" aria-controls="ghCard">
+          <svg class="octocat-svg" viewBox="0 0 24 24" aria-hidden="true">
+            <path fill="currentColor" d="M12 .5C5.73.5.9 5.33.9 11.6c0 4.9 3.18 9.06 7.59 10.53.55.1.76-.24.76-.53l-.02-1.86c-3.09.67-3.74-1.49-3.74-1.49-.5-1.29-1.23-1.63-1.23-1.63-1.01-.69.08-.68.08-.68 1.11.08 1.7 1.15 1.7 1.15.99 1.7 2.6 1.21 3.23.92.1-.72.39-1.21.7-1.49-2.47-.28-5.06-1.24-5.06-5.5 0-1.22.43-2.21 1.15-2.99-.12-.28-.5-1.42.11-2.95 0 0 .93-.3 3.05 1.14a10.5 10.5 0 0 1 5.56 0c2.12-1.44 3.05-1.14 3.05-1.14.61 1.53.23 2.67.11 2.95.72.78 1.15 1.77 1.15 2.99 0 4.27-2.6 5.21-5.08 5.49.4.35.76 1.03.76 2.08l-.01 3.08c0 .3.2.64.77.53 4.4-1.47 7.58-5.63 7.58-10.53C23.1 5.33 18.27.5 12 .5z"/>
+            <g class="octocat-eyes">
+              <circle class="octocat-eye" cx="9.1" cy="11.4" r="1.25"/>
+              <circle class="octocat-eye" cx="14.9" cy="11.4" r="1.25"/>
+            </g>
+          </svg>
+        </button>
       </div>
     </div>
   </div>
 </footer>
+
+<div id="ghCard" class="gh-card" role="dialog" aria-modal="false" aria-label="GitHub profile" hidden>
+  <button type="button" class="gh-close" aria-label="Close">&times;</button>
+  <div class="gh-body">
+    <div class="gh-loading">Loading…</div>
+  </div>
+</div>
 
 <script>
 const observer = new IntersectionObserver((entries) => {
@@ -807,6 +994,451 @@ if (themeBtn) {
 document.querySelectorAll('.project-row').forEach((row, i) => {
   row.style.transitionDelay = `${i * 0.06}s`;
 });
+
+// A drag that starts on empty background shouldn't select the text it
+// sweeps over - that drag is a fog wipe, not a selection.
+(() => {
+  const TEXT = 'p, h1, h2, h3, h4, h5, h6, li, blockquote, code, pre, a, ' +
+    '.hero-name, .hero-tagline, .section-title, .service-title, .service-desc, ' +
+    '.project-title, .project-tagline, .project-desc, .project-tech, ' +
+    '.about-text, .about-detail-label, .about-detail-value, ' +
+    '.contact-eyebrow, .contact-heading, .contact-email, .footer-text, ' +
+    '.gh-login, .gh-name, .gh-bio, .gh-stats, .gh-repo';
+
+  let bgDrag = false;
+
+  // A text element's box is far wider than its glyphs (an h1 spans the full
+  // column), so hit-testing the element would call empty space "text".
+  // Instead, measure the actual rendered text runs and require the pointer
+  // to be within one of them.
+  function overGlyph(el, x, y) {
+    const PAD = 2;   // small tolerance so the edge of a letter still counts
+    for (const node of el.childNodes) {
+      if (node.nodeType === 3) {                 // text node
+        if (!node.nodeValue.trim()) continue;
+        const range = document.createRange();
+        range.selectNodeContents(node);
+        // One rect per rendered line, tight to the glyphs.
+        for (const r of range.getClientRects()) {
+          if (x >= r.left - PAD && x <= r.right + PAD &&
+              y >= r.top - PAD && y <= r.bottom + PAD) return true;
+        }
+      } else if (node.nodeType === 1) {          // element: recurse
+        if (overGlyph(node, x, y)) return true;
+      }
+    }
+    return false;
+  }
+
+  // Capture phase, so this runs before the browser settles the selection.
+  document.addEventListener('pointerdown', (e) => {
+    if (e.button !== 0) return;
+    const host = e.target.closest(TEXT);
+    // Text only counts when the pointer is actually on a glyph.
+    bgDrag = !(host && overGlyph(host, e.clientX, e.clientY));
+    // Don't swallow the event on things that need it (buttons, inputs).
+    const interactive = e.target.closest('button, input, textarea, select, [role="button"]');
+    if (bgDrag && !interactive) e.preventDefault();
+  }, true);
+
+  // selectstart only fires once, but a drag keeps extending the selection,
+  // so the flag is checked for the whole gesture rather than just the start.
+  document.addEventListener('selectstart', (e) => {
+    if (bgDrag) e.preventDefault();
+  }, true);
+
+  // Belt and braces: if the browser still managed to extend a selection
+  // mid-drag, drop it on the spot.
+  document.addEventListener('pointermove', () => {
+    if (!bgDrag) return;
+    const sel = window.getSelection();
+    if (sel && !sel.isCollapsed) sel.removeAllRanges();
+  }, true);
+
+  const end = () => { bgDrag = false; };
+  document.addEventListener('pointerup', end, true);
+  document.addEventListener('pointercancel', end, true);
+})();
+
+// Pinch-to-zoom drives the cursor size (and with it the fog wipe radius)
+// instead of zooming the page.
+(() => {
+  const MIN = 8, MAX = 90, DEFAULT = 18;
+  let size = DEFAULT;
+  window.__cursorSize = size;
+
+  let settle = null;
+  function apply(next) {
+    size = Math.min(Math.max(next, MIN), MAX);
+    window.__cursorSize = size;
+    document.documentElement.style.setProperty('--cursor-size', size + 'px');
+
+    // Track the pinch 1:1, then let the easing back in once it stops.
+    const ring = document.querySelector('.cursor-ring');
+    if (ring) {
+      ring.classList.add('sizing');
+      clearTimeout(settle);
+      settle = setTimeout(() => ring.classList.remove('sizing'), 140);
+    }
+  }
+
+  // Trackpad pinch and ctrl+wheel arrive as a wheel event with ctrlKey set.
+  window.addEventListener('wheel', (e) => {
+    if (!e.ctrlKey) return;      // plain scrolling is left alone
+    e.preventDefault();
+    apply(size * Math.exp(-e.deltaY * 0.01));
+  }, { passive: false });
+
+  // Safari's own gesture events, so macOS pinch works there too.
+  let gestureStart = DEFAULT;
+  window.addEventListener('gesturestart', (e) => {
+    e.preventDefault();
+    gestureStart = size;
+  });
+  window.addEventListener('gesturechange', (e) => {
+    e.preventDefault();
+    apply(gestureStart * e.scale);
+  });
+  window.addEventListener('gestureend', (e) => e.preventDefault());
+
+  // Two-finger pinch on touch screens.
+  const active = new Map();
+  let baseDist = 0, baseSize = DEFAULT;
+  const dist = () => {
+    const [a, b] = [...active.values()];
+    return Math.hypot(a.x - b.x, a.y - b.y);
+  };
+  window.addEventListener('pointerdown', (e) => {
+    if (e.pointerType !== 'touch') return;
+    active.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    window.__pinchFingers = active.size;
+    if (active.size === 2) { baseDist = dist(); baseSize = size; }
+  });
+  window.addEventListener('pointermove', (e) => {
+    if (e.pointerType !== 'touch' || !active.has(e.pointerId)) return;
+    active.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (active.size === 2 && baseDist > 0) apply(baseSize * (dist() / baseDist));
+  }, { passive: true });
+  const drop = (e) => { active.delete(e.pointerId); window.__pinchFingers = active.size; };
+  window.addEventListener('pointerup', drop);
+  window.addEventListener('pointercancel', drop);
+
+  // Reset to the default size.
+  window.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === '0') { e.preventDefault(); apply(DEFAULT); }
+  });
+})();
+
+// Fogged window: a soft haze you wipe away by dragging. Cleared areas
+// slowly re-fog, so the page always settles back to its resting state.
+if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const canvas = document.createElement('canvas');
+  canvas.id = 'fog';
+  document.body.insertBefore(canvas, document.body.firstChild);
+  const ctx = canvas.getContext('2d');
+
+  let w = 0, h = 0, dpr = 1;
+  let rafId = null, visible = true;
+  let fogColor = 'rgba(255,255,255,0.05)';
+
+  // Wipe strokes are kept as segments and re-erased each frame, since the
+  // fog is continuously repainted over them.
+  let strokes = [];
+  const LIFE = 5000;       // ms before a wipe has fully re-fogged
+  // Wipe radius follows the pinch-driven cursor size (18px ring -> 46px wipe).
+  // 1:1 with the ring - --cursor-size is a diameter, so halve it.
+  const RADIUS_AT_DEFAULT = 9;
+  const radius = () => (window.__cursorSize || 18) / 2;
+
+  function readFog() {
+    const light = document.documentElement.getAttribute('data-theme') === 'light';
+    // Light theme: a cool grey haze. Dark theme: a soft white breath.
+    fogColor = light ? 'rgba(120,130,145,0.055)' : 'rgba(210,225,245,0.052)';
+  }
+
+  function resize() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = window.innerWidth;
+    h = window.innerHeight;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  // Last position within the current drag, or null between drags.
+  let lastPt = null;
+
+  function stamp(x, y, r) {
+    strokes.push({ x, y, t: performance.now(), r });
+    if (strokes.length > 2400) strokes.splice(0, strokes.length - 2400);
+  }
+
+  // Pointer events arrive at a fixed rate, so a fast drag leaves big gaps.
+  // Fill them by stamping along the segment - spacing is a fraction of the
+  // brush radius, which keeps the stroke solid at any speed.
+  function addPoint(x, y) {
+    const r = radius();
+    if (!lastPt) { stamp(x, y, r); lastPt = { x, y }; return; }
+
+    const dx = x - lastPt.x, dy = y - lastPt.y;
+    const dist = Math.hypot(dx, dy);
+    const step = Math.max(r * 0.28, 1.5);
+
+    if (dist <= step) { stamp(x, y, r); lastPt = { x, y }; return; }
+
+    // Cap the fill so an extreme jump can't stamp thousands of points.
+    const n = Math.min(Math.ceil(dist / step), 240);
+    for (let i = 1; i <= n; i++) {
+      const t = i / n;
+      stamp(lastPt.x + dx * t, lastPt.y + dy * t, r);
+    }
+    lastPt = { x, y };
+  }
+
+  function frame() {
+    rafId = null;
+    const now = performance.now();
+
+    // Repaint the full haze.
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = fogColor;
+    ctx.fillRect(0, 0, w, h);
+
+    // Punch the wipes back out, fading each one as it ages.
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+
+    for (let i = strokes.length - 1; i >= 0; i--) {
+      const s = strokes[i];
+      const age = now - s.t;
+      if (age > LIFE) { strokes.splice(i, 1); continue; }
+
+      // Clarity fades out over the stroke's life -> the fog creeps back.
+      const k = 1 - age / LIFE;
+      const R = s.r || RADIUS_AT_DEFAULT;
+
+      // Dabs overlap heavily, so keep each one soft - they accumulate
+      // into an even stroke rather than a chain of hard discs.
+      const grad = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, R);
+      grad.addColorStop(0, `rgba(0,0,0,${0.42 * k})`);
+      grad.addColorStop(0.6, `rgba(0,0,0,${0.2 * k})`);
+      grad.addColorStop(1, 'rgba(0,0,0,0)');
+
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, R, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    ctx.globalCompositeOperation = 'source-over';
+
+    // Keep animating only while something is still clearing.
+    if (strokes.length && visible) {
+      rafId = requestAnimationFrame(frame);
+    } else if (visible) {
+      // One last clean pass so the haze ends perfectly uniform.
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = fogColor;
+      ctx.fillRect(0, 0, w, h);
+    }
+  }
+
+  function start() { if (rafId === null && visible) rafId = requestAnimationFrame(frame); }
+
+  let drawing = false;
+  // A two-finger pinch shouldn't also smear the fog.
+  const pinching = () => window.__pinchFingers >= 2;
+
+  window.addEventListener('pointerdown', (e) => {
+    if (pinching()) { drawing = false; return; }
+    drawing = true;
+    lastPt = null;              // new drag - don't bridge from the last one
+    addPoint(e.clientX, e.clientY);
+    start();
+  });
+
+  window.addEventListener('pointermove', (e) => {
+    if (!drawing) return;
+    if (pinching()) { drawing = false; lastPt = null; return; }
+    addPoint(e.clientX, e.clientY);
+    start();
+  }, { passive: true });
+
+  window.addEventListener('pointerup', () => { drawing = false; lastPt = null; });
+  window.addEventListener('pointercancel', () => { drawing = false; lastPt = null; });
+
+  document.addEventListener('visibilitychange', () => {
+    visible = !document.hidden;
+    if (visible) start();
+  });
+
+  // Re-read the haze color when the theme flips.
+  const themeWatch = new MutationObserver(() => { readFog(); start(); });
+  themeWatch.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+  let rt = null;
+  window.addEventListener('resize', () => {
+    clearTimeout(rt);
+    rt = setTimeout(() => { resize(); start(); }, 150);
+  });
+
+  readFog();
+  resize();
+  start();
+  requestAnimationFrame(() => canvas.classList.add('ready'));
+}
+
+// Octocat: eyes follow the pointer; click opens a live profile card.
+(() => {
+  const cat = document.getElementById('octocat');
+  const card = document.getElementById('ghCard');
+  if (!cat || !card) return;
+
+  const body = card.querySelector('.gh-body');
+  const eyes = cat.querySelectorAll('.octocat-eye');
+  const USER = 'dader34';
+  const PROFILE = `https://github.com/${USER}`;
+
+  // --- eye tracking ---
+  if (window.matchMedia('(pointer: fine)').matches &&
+      !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.addEventListener('pointermove', (e) => {
+      const r = cat.getBoundingClientRect();
+      if (!r.width) return;
+      const dx = e.clientX - (r.left + r.width / 2);
+      const dy = e.clientY - (r.top + r.height / 2);
+      const d = Math.hypot(dx, dy) || 1;
+      // Clamp travel so pupils stay inside the eye sockets.
+      const m = Math.min(d / 90, 1) * 0.9;
+      const x = (dx / d) * m, y = (dy / d) * m;
+      eyes.forEach(el => { el.style.transform = `translate(${x}px, ${y}px)`; });
+    }, { passive: true });
+  }
+
+  // --- profile card ---
+  const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g,
+    c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+  let loaded = false;
+
+  // If anything fails (offline, rate limit), still give them a way through.
+  const fallback = () => {
+    body.innerHTML =
+      `<div class="gh-head"><div><div class="gh-login">@${esc(USER)}</div>` +
+      `<div class="gh-name">Danner Baumgartner</div></div></div>` +
+      `<p class="gh-bio">Couldn't load live data right now.</p>` +
+      `<a class="gh-link" href="${PROFILE}" target="_blank" rel="noopener">View on GitHub &rarr;</a>`;
+  };
+
+  async function load() {
+    if (loaded) return;
+    loaded = true;
+    try {
+      const [uRes, rRes] = await Promise.all([
+        fetch(`https://api.github.com/users/${USER}`),
+        fetch(`https://api.github.com/users/${USER}/repos?sort=updated&per_page=3`)
+      ]);
+      if (!uRes.ok) throw new Error('profile');
+      const u = await uRes.json();
+      const repos = rRes.ok ? await rRes.json() : [];
+
+      const repoHtml = (Array.isArray(repos) ? repos : []).map(r =>
+        `<a class="gh-repo" href="${esc(r.html_url)}" target="_blank" rel="noopener">` +
+        `${esc(r.name)}<span>${esc(r.language || '')}</span></a>`
+      ).join('');
+
+      body.innerHTML =
+        `<div class="gh-head">` +
+        `<img class="gh-avatar" src="${esc(u.avatar_url)}" alt="" width="46" height="46">` +
+        `<div><div class="gh-login">@${esc(u.login)}</div>` +
+        `<div class="gh-name">${esc(u.name || '')}</div></div></div>` +
+        (u.bio ? `<p class="gh-bio">${esc(u.bio)}</p>` : '') +
+        `<div class="gh-stats"><div><b>${u.public_repos}</b> repos</div>` +
+        `<div><b>${u.followers}</b> followers</div></div>` +
+        repoHtml +
+        `<a class="gh-link" href="${PROFILE}" target="_blank" rel="noopener">View on GitHub &rarr;</a>`;
+    } catch (err) {
+      loaded = false; // let a later click retry
+      fallback();
+    }
+  }
+
+  const open = () => {
+    card.hidden = false;
+    requestAnimationFrame(() => card.classList.add('open'));
+    cat.setAttribute('aria-expanded', 'true');
+    load();
+  };
+
+  const close = () => {
+    card.classList.remove('open');
+    cat.setAttribute('aria-expanded', 'false');
+    setTimeout(() => { if (!card.classList.contains('open')) card.hidden = true; }, 220);
+  };
+
+  cat.addEventListener('click', () => {
+    card.classList.contains('open') ? close() : open();
+  });
+
+  card.querySelector('.gh-close').addEventListener('click', close);
+
+  // Dismiss on outside click or Escape.
+  document.addEventListener('click', (e) => {
+    if (!card.classList.contains('open')) return;
+    if (!card.contains(e.target) && !cat.contains(e.target)) close();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && card.classList.contains('open')) close();
+  });
+})();
+
+
+// Custom cursor - fine pointers only, so touch devices are untouched.
+if (window.matchMedia('(pointer: fine)').matches) {
+  const ring = document.createElement('div');
+  ring.className = 'cursor-ring';
+  document.body.appendChild(ring);
+  document.documentElement.classList.add('has-custom-cursor');
+
+  let x = 0, y = 0, raf = null;
+
+  const draw = () => {
+    ring.style.transform = `translate(${x}px, ${y}px)`;
+    raf = null;
+  };
+
+  document.addEventListener('pointermove', (e) => {
+    x = e.clientX;
+    y = e.clientY;
+    if (!ring.classList.contains('active')) ring.classList.add('active');
+    // Coalesce to one paint per frame.
+    if (raf === null) raf = requestAnimationFrame(draw);
+  }, { passive: true });
+
+  // Hide when the pointer leaves the window or the tab loses focus,
+  // so a stale ring never sits frozen on the page.
+  document.addEventListener('pointerleave', () => ring.classList.remove('active'));
+  document.addEventListener('pointerenter', () => ring.classList.add('active'));
+  window.addEventListener('blur', () => ring.classList.remove('active'));
+
+  const INTERACTIVE = 'a, button, [role="button"], input, textarea, select, summary';
+
+  // Delegated, so it survives any DOM changes without rebinding.
+  document.addEventListener('pointerover', (e) => {
+    if (e.target.closest(INTERACTIVE)) ring.classList.add('hovering');
+  });
+
+  document.addEventListener('pointerout', (e) => {
+    const from = e.target.closest(INTERACTIVE);
+    // Ignore moves that stay inside the same interactive element.
+    if (from && !from.contains(e.relatedTarget)) ring.classList.remove('hovering');
+  });
+}
 </script>
 
 </body>
